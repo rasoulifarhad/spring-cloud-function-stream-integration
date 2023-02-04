@@ -1,0 +1,30 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  main:
+    lazy-initialization: false
+  cloud:
+    function:
+      definition: logIt;produceIt;doubleIt;process;doubleIt|produceIt|logIt
+    stream:
+      #source: process
+        
+      bindings:
+        #process-out-0:
+        #  destination: idestination
+        doubleIt|produceIt|logIt-in-0:
+          destination: idestination
+          group: igroup
+      rabbit:
+        default:
+          durableSubscription: true   
+        bindings:
+          doubleIt|produceIt|logIt-in-0:  
+            consumer:
+              durableSubscription: true 
+               
+# important: make mvn spring-boot:start / stop behave!
+#  application:
+#    admin:
+#      enabled: true
